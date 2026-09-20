@@ -5,6 +5,8 @@ color 0A
 cls
 
 rem PG-BOT | PORT GUARD BOT
+rem Version 1.0 RC
+rem Developed: 20 Sep 2026
 rem Developed by Lung Aunty - Pattani Port
 rem Human x AI Collaboration: ChatGPT + Pinta
 rem Scope: User TEMP cleanup only. No Admin. No telemetry.
@@ -34,14 +36,18 @@ for /f "delims=" %%A in ('powershell -NoProfile -Command "$a=[double]%AFTER%; if
 
 (
 echo PG-BOT ^| PORT GUARD BOT
+echo Version   : 1.0
+echo Developed : 20 Sep 2026
 echo.
-echo Last run : %date% %time:~0,8%
-echo Cleaned  : %CLEANED%
-echo Remain   : %REMAIN%
-echo Status   : DONE
+echo Last run  : %date% %time:~0,8%
+echo Cleaned   : %CLEANED%
+echo Remain    : %REMAIN%
+echo Status    : DONE
 echo.
 echo Developed by Lung Aunty - Pattani Port
-echo Human x AI Collaboration: ChatGPT + Pinta
+echo Human x AI Collaboration ^| ChatGPT + Pinta
+echo.
+echo Note: Last run uses this computer's local date/time.
 ) > "%RECEIPT%"
 
 cls
