@@ -142,3 +142,54 @@ COMPUTER NAME : WIN11-PGB
 **Test in VM first → ผ่านแล้วค่อยใช้กับเครื่องจริง**
 
 VM นี้ตั้งใจให้เป็น Windows sandbox สำหรับทดสอบ PG-BOT, batch/script และการเปลี่ยนแปลงรุ่นถัดไป โดยลดความเสี่ยงต่อเครื่องงานจริง
+
+
+---
+
+## Incident / Lesson Learned — Host disk full
+
+ระหว่างติดตั้ง Windows 11 พบว่า Ubuntu root partition มีขนาดประมาณ **73 GiB** และก่อนเริ่มมีพื้นที่ว่างประมาณ **22 GiB** ขณะที่ `win11.qcow2` แม้ตั้ง logical size ไว้ 64 GiB แบบ sparse แต่โตจริงจนประมาณ **23 GiB** ทำให้ root filesystem ขึ้น **99–100%** และเหลือพื้นที่ประมาณ 1 GiB
+
+จุดตรวจที่ใช้:
+
+```bash
+df -h /
+sudo du -h /var/lib/libvirt/images/win11.qcow2
+sudo du -xhd1 /var 2>/dev/null | sort -h
+sudo du -xhd1 /var/lib 2>/dev/null | sort -h
+lsblk -o NAME,SIZE,FSTYPE,LABEL,UUID,MOUNTPOINTS
+```
+
+ผลสำคัญของเครื่องทดสอบ:
+
+- Ubuntu อยู่บน `nvme0n1p7` ext4 ประมาณ 73 GiB
+- `/var/lib/libvirt` ใช้ประมาณ 23 GiB โดยหลักคือ `win11.qcow2`
+- `/var/lib/snapd` ประมาณ 6.2 GiB
+- SSD ทั้งลูกประมาณ 477 GiB และยังมี Windows OEM / recovery เดิมอยู่
+- มี partition D: ขนาดประมาณ 228.8 GiB ซึ่งต้องตรวจสถานะและข้อมูลให้ชัดก่อนปรับ partition
+
+### กฎเหล็กระหว่างกู้พื้นที่
+
+**ห้ามเปิด WIN11-PGB VM จนกว่าจะย้าย/ขยายพื้นที่ Linux สำเร็จ และตรวจแล้วว่า Host มีพื้นที่ว่างปลอดภัย**
+
+ไม่ลบ `win11.qcow2` เพราะ Windows VM ติดตั้งไปเกือบเสร็จแล้ว และไม่แตะ Windows OEM / WinRE / Recovery โดยไม่จำเป็น
+
+### แผนถัดไป
+
+เครื่องนี้ใช้งาน Ubuntu มากกว่า Windows จึงวางแผนให้ **Linux เป็นระบบหลักและมีพื้นที่มากขึ้น แต่เก็บ Windows OEM เดิมไว้**
+
+ลำดับงานที่ตั้งใจทำ:
+
+1. ตรวจสถานะ D: และ BitLocker/Device Encryption ให้แน่ชัด
+2. ตรวจข้อมูลและพื้นที่ว่างของ D:
+3. สำรองข้อมูลสำคัญก่อนแก้ partition
+4. ลด/จัดสรรพื้นที่จาก D: และสร้างพื้นที่ Linux แบบ ext4
+5. ย้าย/ขยาย Ubuntu ไปยังพื้นที่ใหม่
+6. ตรวจ UUID, `/etc/fstab`, UEFI/GRUB และการบูต
+7. ทดสอบให้ Ubuntu และ Windows OEM บูตได้ทั้งคู่
+8. ตรวจ `df -h /` ว่ามีพื้นที่ปลอดภัย
+9. หลังทุกอย่างผ่านแล้วจึงอนุญาตให้เปิด `WIN11-PGB` อีกครั้ง
+
+### บทเรียน
+
+**Sparse qcow2 ไม่ได้แปลว่าใช้พื้นที่น้อยเสมอไป** — มันเพียงไม่จองเต็ม logical size ตั้งแต่ต้น แต่จะโตตามข้อมูลจริงของ Guest OS ดังนั้นก่อนสร้าง Windows VM ต้องดู **free space ของ Host** ไม่ใช่ดูแค่ virtual disk size และควรเผื่อพื้นที่สำหรับ Windows Update, temporary files, snapshots และการเติบโตของ VM ด้วย
