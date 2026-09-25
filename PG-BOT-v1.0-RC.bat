@@ -12,6 +12,7 @@ rem Human x AI Collaboration: ChatGPT + Pinta
 rem Scope: User TEMP cleanup only. No Admin. No telemetry.
 
 set "RECEIPT=%~dp0PG-BOT-LAST.txt"
+set "COMPUTER_NAME=%COMPUTERNAME%"
 
 echo ========================================
 echo              PG-BOT
@@ -39,6 +40,12 @@ echo PG-BOT ^| PORT GUARD BOT
 echo Version   : 1.0
 echo Developed : 20 Sep 2026
 echo.
+echo ========================================
+echo COMPUTER NAME : %COMPUTER_NAME%
+echo ========================================
+echo Copy this Computer Name to:
+echo DTMC ^> ตรวจอุปกรณ์ ^> Computer Name
+echo.
 echo Last run  : %date% %time:~0,8%
 echo Cleaned   : %CLEANED%
 echo Remain    : %REMAIN%
@@ -55,6 +62,8 @@ echo ========================================
 echo              PG-BOT
 echo          PORT GUARD BOT
 echo ========================================
+echo.
+echo Computer Name : %COMPUTER_NAME%
 echo.
 echo Cleaned : %CLEANED%
 echo Remain  : %REMAIN%
