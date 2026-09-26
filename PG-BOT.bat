@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 setlocal
 title PG-BOT - PORT GUARD BOT
 color 0A
@@ -49,7 +50,8 @@ echo.
 echo Computer Name : %COMPUTER_NAME%
 echo Platform      : %PLATFORM%
 echo.
-echo Send Computer Name and Platform to your administrator.
+echo กรุณาคัดลอก Computer Name ของเครื่องนี้
+echo ไปกรอกในแอป DTMC ให้ตรงกับเลขครุภัณฑ์ของเครื่อง
 echo.
 echo Developed by Lung Aunty - Pattani Port
 echo Human x AI Collaboration ^| ChatGPT + Pinta
@@ -68,20 +70,15 @@ echo Remain        : %REMAIN%
 echo Status        : DONE
 echo.
 echo ========================================
-echo          COPY THESE 2 ITEMS
-echo ========================================
 echo Computer Name : %COMPUTER_NAME%
 echo Platform      : %PLATFORM%
 echo ========================================
 echo.
-echo Send Computer Name and Platform
-echo to your administrator.
+echo กรุณาคัดลอก Computer Name ของเครื่องนี้
+echo ไปกรอกในแอป DTMC ให้ตรงกับเลขครุภัณฑ์ของเครื่อง
 echo.
-echo Receipt : PG-BOT-LAST.txt
+echo กดปุ่มใดก็ได้เพื่อออกจากหน้านี้
 echo.
-echo This window will stay open.
-echo Press any key only after you have copied the information.
-echo.
-pause
+pause >nul
 
 endlocal
