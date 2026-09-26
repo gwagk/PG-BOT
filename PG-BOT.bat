@@ -4,7 +4,16 @@ title PG-BOT - PORT GUARD BOT
 color 0A
 cls
 
+rem PG-BOT | PORT GUARD BOT
+rem Version 1.0 RC
+rem Developed: 20 Sep 2026
+rem Developed by Lung Aunty - Pattani Port
+rem Human x AI Collaboration: ChatGPT + Pinta
+rem Scope: User TEMP cleanup only. No Admin. No telemetry.
+
 set "RECEIPT=%~dp0PG-BOT-LAST.txt"
+set "COMPUTER_NAME=%COMPUTERNAME%"
+set "PLATFORM=Windows"
 
 echo ========================================
 echo              PG-BOT
@@ -29,11 +38,23 @@ for /f "delims=" %%A in ('powershell -NoProfile -Command "$a=[double]%AFTER%; if
 
 (
 echo PG-BOT ^| PORT GUARD BOT
+echo Version       : 1.0 RC
+echo Developed     : 20 Sep 2026
 echo.
-echo Last run : %date% %time:~0,8%
-echo Cleaned  : %CLEANED%
-echo Remain   : %REMAIN%
-echo Status   : DONE
+echo Last run      : %date% %time:~0,8%
+echo Cleaned       : %CLEANED%
+echo Remain        : %REMAIN%
+echo Status        : DONE
+echo.
+echo Computer Name : %COMPUTER_NAME%
+echo Platform      : %PLATFORM%
+echo.
+echo Send Computer Name and Platform to your administrator.
+echo.
+echo Developed by Lung Aunty - Pattani Port
+echo Human x AI Collaboration ^| ChatGPT + Pinta
+echo.
+echo Note: Last run uses this computer's local date/time.
 ) > "%RECEIPT%"
 
 cls
@@ -42,13 +63,24 @@ echo              PG-BOT
 echo          PORT GUARD BOT
 echo ========================================
 echo.
-echo Cleaned : %CLEANED%
-echo Remain  : %REMAIN%
+echo Cleaned       : %CLEANED%
+echo Remain        : %REMAIN%
+echo Status        : DONE
 echo.
-echo                 DONE
+echo ========================================
+echo          COPY THESE 2 ITEMS
+echo ========================================
+echo Computer Name : %COMPUTER_NAME%
+echo Platform      : %PLATFORM%
+echo ========================================
+echo.
+echo Send Computer Name and Platform
+echo to your administrator.
 echo.
 echo Receipt : PG-BOT-LAST.txt
-echo ========================================
+echo.
+echo This window will stay open.
+echo Press any key only after you have copied the information.
 echo.
 pause
 
